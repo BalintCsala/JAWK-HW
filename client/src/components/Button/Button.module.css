@@ -1,0 +1,22 @@
+.button {
+    border: 2px solid var(--tertiary-color);
+    border-radius: 0.5em;
+    padding: 0.2em 1em;
+    margin: 0.5rem;
+}
+
+.button:active {
+    background: var(--active-color);
+}
+
+.small {
+    font-size: 1rem;
+}
+
+.medium {
+    font-size: 1.5rem;
+}
+
+.large {
+    font-size: 2rem;
+}

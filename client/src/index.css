@@ -1,0 +1,18 @@
+:root {
+    --primary-color: #080811;
+    --secondary-color: #1f222d;
+    --tertiary-color: #131323;
+
+    --active-color: #ff6b6b;
+
+    --text-color: white;
+    --secondary-text-color: gray;
+}
+
+html,
+body,
+#root {
+    height: 100%;
+    color-scheme: dark;
+    background: var(--primary-color);
+}
