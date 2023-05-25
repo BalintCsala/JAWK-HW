@@ -8,9 +8,7 @@
         <properties>
             <property name="hibernate.connection.url" value="jdbc:mysql://aws.connect.psdb.cloud/userdata"/>
             <property name="hibernate.connection.driver_class" value="com.mysql.cj.jdbc.Driver"/>
-            <property name="hibernate.connection.username" value="x82l0rm5lpprh0b5oqxc"/>
-            <property name="hibernate.connection.password"
-                      value="pscale_pw_hlOvpp7BpurrAhwPLEdXJjUBOWnoSoeA9eWlZ7Dxatr"/>
+            <property name="hibernate.connection.username" value="ctd76r8l12f9zp2cn4p0"/>
         </properties>
     </persistence-unit>
 </persistence>
