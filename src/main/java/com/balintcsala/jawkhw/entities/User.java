@@ -2,27 +2,32 @@ package com.balintcsala.jawkhw.entities;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
-@Table(name = "users", schema = "userdata", catalog = "")
-public class User {
+@Table(name = "users", schema = "userdata")
+public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "id")
     private int id;
     @Basic
-    @Column(name = "admin")
     private Byte admin;
     @Basic
-    @Column(name = "username")
     private String username;
     @Basic
-    @Column(name = "name")
     private String name;
     @Basic
     @Column(name = "password_hash")
     private String passwordHash;
+
+    @ManyToMany
+    @JoinTable(name = "follows", joinColumns = @JoinColumn(name = "follower_id"), inverseJoinColumns = @JoinColumn(name = "followed_id"))
+    Set<User> followedUsers;
+
+    @ManyToMany(mappedBy = "followedUsers")
+    Set<User> followers;
 
     public User() {
     }
@@ -36,10 +41,6 @@ public class User {
 
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public Byte getAdmin() {
@@ -60,10 +61,6 @@ public class User {
 
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getPasswordHash() {

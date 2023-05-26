@@ -1,42 +1,28 @@
 package com.balintcsala.jawkhw;
 
-import com.balintcsala.jawkhw.entities.User;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
+import io.github.cdimascio.dotenv.Dotenv;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.HashMap;
-
+@SpringBootApplication
+@EnableJpaRepositories("com.balintcsala.jawkhw.repositories")
+@ComponentScan("com.balintcsala.jawkhw.controllers")
+@EntityScan("com.balintcsala.jawkhw.entities")
 public class Main {
 
     public static void main(String[] args) {
-        HashMap<String, String> properties = getProperties();
+        Dotenv dotenv = Dotenv.configure().load();
 
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("default", properties);
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        em.persist(new User(true, "balint", "Bálint", "6f7a1d8bf41239002cf84f385ab6997fe8095c51da713f8e88f1bc33f8b8fa1c"));
-        em.getTransaction().commit();
-        em.close();
-        emf.close();
-    }
+        dotenv.entries().forEach(entry -> {
+            String key = entry.getKey();
+            String value = entry.getValue();
+            System.setProperty(key, value);
+        });
 
-    private static HashMap<String, String> getProperties() {
-        String pass = "";
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(".env"));
-            pass = reader.readLine();
-        } catch (IOException e) {
-            System.err.println("Please create a .env file in the root directory of the project.");
-            System.exit(1);
-        }
-
-        HashMap<String, String> properties = new HashMap<>();
-        properties.put("javax.persistence.jdbc.password", pass);
-        return properties;
+        SpringApplication.run(Main.class, args);
     }
 
 }

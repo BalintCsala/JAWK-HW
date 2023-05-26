@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+  <object-set>
+    <table path="userdata.posts">
+      <table path="userdata.users" name="user_posts_fk" from="user_id" to="id"/>
+    </table>
+    <table path="userdata.follows">
+      <table path="userdata.users" name="follower_fk" from="follower_id" to="id"/>
+      <table path="userdata.users" name="followed_fk" from="followed_id" to="id"/>
+    </table>
+  </object-set>
+</data>
