@@ -173,4 +173,79 @@ public class UserController {
         return new LoginResult(user, token.getToken());
     }
 
+    static class AvatarChangeData {
+        private String token;
+        private String avatar;
+
+        public String getToken() {
+            return token;
+        }
+
+        public String getAvatar() {
+            return avatar;
+        }
+    }
+
+    @PutMapping("/user/avatar")
+    public boolean changeAvatar(@RequestBody AvatarChangeData data) {
+        Token token = tokenRepository.findByToken(data.getToken());
+        if (token == null) {
+            return false;
+        }
+        User user = token.getUser();
+        user.setAvatar(data.getAvatar());
+        userRepository.save(user);
+        return true;
+    }
+
+    static class BioChangeData {
+        private String token;
+        private String bio;
+
+        public String getToken() {
+            return token;
+        }
+
+        public String getBio() {
+            return bio;
+        }
+    }
+
+    @PutMapping("/user/bio")
+    public boolean changeBio(@RequestBody BioChangeData data) {
+        Token token = tokenRepository.findByToken(data.getToken());
+        if (token == null) {
+            return false;
+        }
+        User user = token.getUser();
+        user.setBio(data.getBio());
+        userRepository.save(user);
+        return true;
+    }
+
+    static class FollowData {
+        private String token;
+        private String username;
+
+        public String getToken() {
+            return token;
+        }
+
+        public String getUsername() {
+            return username;
+        }
+    }
+
+    @PostMapping("/user/follow")
+    public boolean follow(@RequestBody FollowData data) {
+        Token token = tokenRepository.findByToken(data.token);
+        if (token == null) {
+            return false;
+        }
+        User user = token.getUser();
+        User followed = userRepository.findByUsername(data.username);
+        user.followUser(followed);
+        userRepository.save(user);
+        return true;
+    }
 }

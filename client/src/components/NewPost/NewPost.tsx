@@ -5,22 +5,7 @@ import {PostType} from "../../api/types.ts";
 import {useAppSelector} from "../../redux/reduxHooks.ts";
 import {createPost} from "../../api/posts.ts";
 import Tooltip from "../Tooltip/Tooltip.tsx";
-
-function showImageSelector(): Promise<File> {
-    const input = document.createElement("input");
-    input.type = "file";
-    input.accept = "image/*";
-    input.click();
-    return new Promise((resolve, reject) => {
-        input.onchange = () => {
-            if (input.files && input.files[0]) {
-                resolve(input.files[0]);
-            } else {
-                reject();
-            }
-        };
-    });
-}
+import {showImageSelector} from "../../utils.ts";
 
 function NewPost() {
     const token = useAppSelector(state => state.authentication.token);
@@ -69,42 +54,39 @@ function NewPost() {
                         </div>
                     </>
                 )}
-                <div>
-                    <br/>
-                    <div>
-                        <label htmlFor="restricted">Set to restricted: </label>
-                        <input id="restricted" type="checkbox" onChange={e => setRestricted(e.target.checked)} />
-                        <span> </span>
-                        <Tooltip text="Restricted posts are only visible to people you follow" />
-                    </div>
-                    <Button text={"Post"} onClick={async () => {
-                        if (!token) {
-                            alert("You must be logged in to post!");
+                <div className={style.restrictedLine}>
+                    <label htmlFor="restricted">Set to restricted: </label>
+                    <input id="restricted" type="checkbox" onChange={e => setRestricted(e.target.checked)} />
+                    <span> </span>
+                    <Tooltip text="Restricted posts are only visible to people you follow" />
+                </div>
+                <Button text={"Post"} onClick={async () => {
+                    if (!token) {
+                        alert("You must be logged in to post!");
+                        return;
+                    }
+
+                    if (type === PostType.Text) {
+                        createPost(token, type, text, restricted).then(() => {
+                            window.location.reload();
+                        });
+                    } else {
+                        if (!file) {
+                            alert("You must select a file to post!");
                             return;
                         }
 
-                        if (type === PostType.Text) {
-                            createPost(token, type, text, restricted).then(() => {
+                        const reader = new FileReader();
+                        reader.onload = () => {
+                            if (!reader.result) return;
+                            const base64 = `data:${file.type};base64,` + reader.result.toString().split(",")[1];
+                            createPost(token, type, base64, restricted).then(() => {
                                 window.location.reload();
                             });
-                        } else {
-                            if (!file) {
-                                alert("You must select a file to post!");
-                                return;
-                            }
-
-                            const reader = new FileReader();
-                            reader.onload = () => {
-                                if (!reader.result) return;
-                                const base64 = `data:${file.type};base64,` + reader.result.toString().split(",")[1];
-                                createPost(token, type, base64, restricted).then(() => {
-                                    window.location.reload();
-                                });
-                            };
-                            reader.readAsDataURL(file);
-                        }
-                    }} />
-                </div>
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                }} />
             </div>
         </div>
     );

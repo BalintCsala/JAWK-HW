@@ -16,4 +16,10 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
     @Query("SELECT p FROM Post p WHERE p.restricted = 0")
     Page<Post> findVisiblePosts(Pageable pageable);
 
+    @Query("SELECT p FROM Post p WHERE :author = p.author AND (p.restricted = 0 OR :user = p.author OR :user IN (SELECT f.followed FROM Follow f WHERE f.follower = p.author))")
+    Page<Post> findVisiblePostsForUserByAuthor(@Param("user") User user, @Param("author") User author, Pageable pageable);
+
+    @Query("SELECT p FROM Post p WHERE :author = p.author AND p.restricted = 0")
+    Page<Post> findVisiblePostsByAuthor(User author, Pageable pageable);
+
 }

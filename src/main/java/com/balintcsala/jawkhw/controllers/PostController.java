@@ -2,8 +2,10 @@ package com.balintcsala.jawkhw.controllers;
 
 import com.balintcsala.jawkhw.entities.Post;
 import com.balintcsala.jawkhw.entities.Token;
+import com.balintcsala.jawkhw.entities.User;
 import com.balintcsala.jawkhw.repositories.PostRepository;
 import com.balintcsala.jawkhw.repositories.TokenRepository;
+import com.balintcsala.jawkhw.repositories.UserRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -40,12 +42,32 @@ public class PostController {
         }
     }
 
+    static class UserPostsData {
+        private User user;
+        private Iterable<Post> posts;
+
+        public UserPostsData(User user, Iterable<Post> posts) {
+            this.user = user;
+            this.posts = posts;
+        }
+
+        public User getUser() {
+            return user;
+        }
+
+        public Iterable<Post> getPosts() {
+            return posts;
+        }
+    }
+
     private final PostRepository postRepository;
     private final TokenRepository tokenRepository;
+    private final UserRepository userRepository;
 
-    public PostController(PostRepository postRepository, TokenRepository tokenRepository) {
+    public PostController(PostRepository postRepository, TokenRepository tokenRepository, UserRepository userRepository) {
         this.postRepository = postRepository;
         this.tokenRepository = tokenRepository;
+        this.userRepository = userRepository;
     }
 
     @GetMapping("/posts/{page}")
@@ -57,6 +79,20 @@ public class PostController {
         } else {
             return postRepository.findVisiblePosts(pagination);
         }
+    }
+
+    @GetMapping("/user/{username}/{page}")
+    UserPostsData getUserPosts(@PathVariable int page, @PathVariable String username, @RequestParam(required = false) String token) {
+        Token tokenObj = tokenRepository.findByToken(token);
+        User author = userRepository.findByUsername(username);
+        Pageable pagination = PageRequest.of(page, 10, Sort.by("id").descending());
+        Iterable<Post> posts;
+        if (tokenObj != null) {
+            posts = postRepository.findVisiblePostsForUserByAuthor(tokenObj.getUser(), author, pagination);
+        } else {
+            posts = postRepository.findVisiblePostsByAuthor(author, pagination);
+        }
+        return new UserPostsData(author, posts);
     }
 
     @PostMapping("/post/new")

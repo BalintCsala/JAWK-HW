@@ -1,12 +1,12 @@
 import style from "./Nav.module.css";
 import {useState} from "react";
 import Authentication from "./Login/Authentication.tsx";
-
-// TODO: Get user data from API
-const user = "balint";
+import {Link} from "react-router-dom";
+import {useAppSelector} from "../../redux/reduxHooks.ts";
 
 function Nav() {
     const [active, setActive] = useState(false);
+    const username = useAppSelector(state => state.authentication.username);
 
     return (
         <>
@@ -14,9 +14,8 @@ function Nav() {
             </button>
             <aside className={style.sidebar + " " + (active ? style.active : "")}>
                 <nav className={style.nav}>
-                    <a className={style.navLink} href="/">Home</a>
-                    <a className={style.navLink} href="/explore">Explore</a>
-                    <a className={style.navLink} href={`/user/${user}`}>Profile</a>
+                    <Link className={style.navLink} to="/">Explore</Link>
+                    <Link className={style.navLink} to={`/user/${username}`}>Profile</Link>
                     <Authentication />
                 </nav>
             </aside>

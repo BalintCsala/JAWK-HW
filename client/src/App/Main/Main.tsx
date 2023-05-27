@@ -1,10 +1,10 @@
 import style from "./Main.module.css";
-import ExplorePage from "./ExplorePage/ExplorePage.tsx";
+import Page from "./Page/Page.tsx";
 
 function Main() {
     return (
         <main className={style.main}>
-            <ExplorePage />
+            <Page />
         </main>
     );
 }

@@ -8,7 +8,8 @@ export interface UserData {
     username: string;
     admin: boolean;
     followers: UserData[];
-    followedUsers: UserData[];
+    avatar: string;
+    bio: string;
 }
 
 export interface PostData {

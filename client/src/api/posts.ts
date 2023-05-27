@@ -1,9 +1,13 @@
-import {PostData, PostType} from "./types.ts";
+import {PostData, PostType, UserData} from "./types.ts";
 
 export interface PaginatedPosts {
     first: boolean;
     last: boolean;
     posts: PostData[];
+}
+
+export interface PaginatedUserPosts extends PaginatedPosts {
+    user: UserData;
 }
 
 export function getPosts(page: number, token?: string) {
@@ -15,6 +19,19 @@ export function getPosts(page: number, token?: string) {
                 last: data.last,
                 posts: data.content,
             } as PaginatedPosts;
+        });
+}
+
+export function getUserPosts(page: number, username: string, token?: string) {
+    return fetch(`${import.meta.env.VITE_API_URL}/user/${username}/${page}?token=${token ?? ""}`)
+        .then(response => response.json())
+        .then(data => {
+            return {
+                first: data.posts.first,
+                last: data.posts.last,
+                posts: data.posts.content,
+                user: data.user,
+            } as PaginatedUserPosts;
         });
 }
 
