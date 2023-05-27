@@ -2,11 +2,15 @@
 <data>
   <object-set>
     <table path="userdata.posts">
-      <table path="userdata.users" name="user_posts_fk" from="user_id" to="id"/>
+      <table path="userdata.users" name="post_author_fk" from="author_name" to="username"/>
     </table>
     <table path="userdata.follows">
-      <table path="userdata.users" name="follower_fk" from="follower_id" to="id"/>
-      <table path="userdata.users" name="followed_fk" from="followed_id" to="id"/>
+      <table path="userdata.users" name="follower_fk" from="follower" to="username"/>
+      <table path="userdata.users" name="followed_fk" from="followed" to="username"/>
+    </table>
+    <table path="userdata.tokens">
+      <table path="userdata.users" name="user_fk" from="user" to="name"/>
+      <table path="userdata.users" name="user_fk" from="user" to=""/>
     </table>
   </object-set>
 </data>

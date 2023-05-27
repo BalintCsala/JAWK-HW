@@ -12,7 +12,7 @@ public class Post implements Serializable {
     private int id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "author_name")
     private User author;
 
     @Basic
@@ -23,10 +23,6 @@ public class Post implements Serializable {
     @Basic
     @Column(name = "private")
     private byte privatePost;
-
-    public int getId() {
-        return id;
-    }
 
     public Object getType() {
         return type;
@@ -46,11 +42,10 @@ public class Post implements Serializable {
 
     public Post() {}
 
-    public Post(int id, User author, Object type, String content, byte privatePost) {
-        this.id = id;
+    public Post(User author, Object type, String content, boolean privatePost) {
         this.author = author;
         this.type = type;
         this.content = content;
-        this.privatePost = privatePost;
+        this.privatePost = (byte) (privatePost ? 1 : 0);
     }
 }

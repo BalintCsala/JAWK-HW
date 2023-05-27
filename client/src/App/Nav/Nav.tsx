@@ -1,5 +1,6 @@
 import style from "./Nav.module.css";
 import {useState} from "react";
+import Authentication from "./Login/Authentication.tsx";
 
 // TODO: Get user data from API
 const user = "balint";
@@ -16,6 +17,7 @@ function Nav() {
                     <a className={style.navLink} href="/">Home</a>
                     <a className={style.navLink} href="/explore">Explore</a>
                     <a className={style.navLink} href={`/user/${user}`}>Profile</a>
+                    <Authentication />
                 </nav>
             </aside>
         </>

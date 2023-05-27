@@ -9,10 +9,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
 @EnableJpaRepositories("com.balintcsala.jawkhw.repositories")
-@ComponentScan("com.balintcsala.jawkhw.controllers")
+@ComponentScan("com.balintcsala.jawkhw.*")
 @EntityScan("com.balintcsala.jawkhw.entities")
 public class Main {
-
     public static void main(String[] args) {
         Dotenv dotenv = Dotenv.configure().load();
 

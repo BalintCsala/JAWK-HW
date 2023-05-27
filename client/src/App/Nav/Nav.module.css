@@ -1,6 +1,7 @@
 .sidebar {
     width: 15rem;
     background: var(--tertiary-color);
+    flex-shrink: 0;
 }
 
 .nav {

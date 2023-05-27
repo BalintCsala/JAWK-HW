@@ -9,25 +9,26 @@ import java.util.Set;
 @Entity
 @Table(name = "users", schema = "userdata")
 public class User implements Serializable {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic
     @Id
-    private int id;
+    private String username;
+
     @Basic
     private Byte admin;
-    @Basic
-    private String username;
+
     @Basic
     private String name;
+
     @Basic
     @Column(name = "password_hash")
     private String passwordHash;
 
     @ManyToMany
-    @JoinTable(name = "follows", joinColumns = @JoinColumn(name = "follower_id"), inverseJoinColumns = @JoinColumn(name = "followed_id"))
-    Set<User> followedUsers;
+    @JoinTable(name = "follows", joinColumns = @JoinColumn(name = "follower"), inverseJoinColumns = @JoinColumn(name = "followed"))
+    private Set<User> followedUsers;
 
     @ManyToMany(mappedBy = "followedUsers")
-    Set<User> followers;
+    private Set<User> followers;
 
     public User() {
     }
@@ -39,28 +40,24 @@ public class User implements Serializable {
         this.passwordHash = passwordHash;
     }
 
-    public int getId() {
-        return id;
-    }
-
     public Byte getAdmin() {
         return admin;
     }
 
-    public void setAdmin(Byte admin) {
-        this.admin = admin;
+    public void setAdmin(boolean admin) {
+        this.admin = (byte) (admin ? 1 : 0);
     }
 
     public String getUsername() {
         return username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPasswordHash() {
@@ -76,11 +73,23 @@ public class User implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return id == user.id && Objects.equals(admin, user.admin) && Objects.equals(username, user.username) && Objects.equals(name, user.name) && Objects.equals(passwordHash, user.passwordHash);
+        return Objects.equals(username, user.username) && Objects.equals(admin, user.admin) && Objects.equals(name, user.name) && Objects.equals(passwordHash, user.passwordHash);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, admin, username, name, passwordHash);
+        return Objects.hash(username, name, admin, passwordHash);
+    }
+
+    public Set<User> getFollowedUsers() {
+        return followedUsers;
+    }
+
+    public Set<User> getFollowers() {
+        return followers;
+    }
+
+    public void followUser(User user) {
+        followedUsers.add(user);
     }
 }

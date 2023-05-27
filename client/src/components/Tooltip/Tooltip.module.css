@@ -1,0 +1,42 @@
+.container {
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.icon {
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+}
+
+.tooltip {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    padding: 0.5rem;
+    width: 20rem;
+    background: var(--tertiary-color);
+    color: white;
+    display: none;
+}
+
+.container:hover .tooltip {
+    display: block;
+}
+
+input[type="text"],
+input[type="password"] {
+    margin: 0.5rem;
+    font-size: 1rem;
+}
+
+h2 {
+    font-size: 1.5rem;
+    margin-top: 0.5em;
+}
