@@ -28,7 +28,7 @@ function NewPost() {
     const [type, setType] = useState(PostType.Text);
     const [text, setText] = useState("");
     const [file, setFile] = useState<File | null>(null);
-    const [privatePost, setPrivatePost] = useState(false);
+    const [restricted, setRestricted] = useState(false);
 
     if (!token) {
         return (
@@ -72,10 +72,10 @@ function NewPost() {
                 <div>
                     <br/>
                     <div>
-                        <label htmlFor="private">Set to private: </label>
-                        <input id="private" type="checkbox" onChange={e => setPrivatePost(e.target.checked)} />
+                        <label htmlFor="restricted">Set to restricted: </label>
+                        <input id="restricted" type="checkbox" onChange={e => setRestricted(e.target.checked)} />
                         <span> </span>
-                        <Tooltip text="Private posts are only visible to people you follow" />
+                        <Tooltip text="Restricted posts are only visible to people you follow" />
                     </div>
                     <Button text={"Post"} onClick={async () => {
                         if (!token) {
@@ -84,7 +84,7 @@ function NewPost() {
                         }
 
                         if (type === PostType.Text) {
-                            createPost(token, type, text, privatePost).then(() => {
+                            createPost(token, type, text, restricted).then(() => {
                                 window.location.reload();
                             });
                         } else {
@@ -97,7 +97,7 @@ function NewPost() {
                             reader.onload = () => {
                                 if (!reader.result) return;
                                 const base64 = `data:${file.type};base64,` + reader.result.toString().split(",")[1];
-                                createPost(token, type, base64, privatePost).then(() => {
+                                createPost(token, type, base64, restricted).then(() => {
                                     window.location.reload();
                                 });
                             };

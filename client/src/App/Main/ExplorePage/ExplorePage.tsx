@@ -4,11 +4,13 @@ import {useEffect, useState} from "react";
 import {PostData} from "../../../api/types.ts";
 import {getPosts, PaginatedPosts} from "../../../api/posts.ts";
 import Button, {ButtonSize} from "../../../components/Button/Button.tsx";
+import {useAppSelector} from "../../../redux/reduxHooks.ts";
 
 // TODO: Get user data from API
 const canPost = true;
 
 function ExplorePage() {
+    const token = useAppSelector(state => state.authentication.token);
     const [page, setPage] = useState(0);
     const [loading, setLoading] = useState(true);
 
@@ -16,7 +18,7 @@ function ExplorePage() {
 
     useEffect(() => {
         setLoading(true);
-        getPosts(page).then(pagination => {
+        getPosts(page, token ?? "").then(pagination => {
             setPagination(pagination);
             setLoading(false);
         }).catch(err => console.log(err));

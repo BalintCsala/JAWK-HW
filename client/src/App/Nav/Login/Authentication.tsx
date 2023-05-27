@@ -18,6 +18,7 @@ function LoggedIn({username, name}: {username: string, name: string}) {
                     return;
                 }
                 dispatch(logout());
+                window.location.reload();
             }} />
         </>
     );
@@ -43,6 +44,7 @@ function LoginOrRegister() {
                 }
 
                 dispatch(login({username: result.user.username, name: result.user.name, token: result.token}));
+                window.location.reload();
             }} />
             <h2>Register</h2>
             <input type="text" placeholder="Username" onChange={e => setUsername(e.target.value)} />
@@ -56,6 +58,7 @@ function LoginOrRegister() {
                 }
 
                 dispatch(login({username: result.user.username, name: result.user.name, token: result.token}));
+                window.location.reload();
             }} />
         </>
     );

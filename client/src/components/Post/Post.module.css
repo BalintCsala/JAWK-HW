@@ -42,3 +42,10 @@
 .nameRow:hover .name {
     color: var(--active-color);
 }
+
+.restrictedIcon {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    margin-left: 0.5em;
+}

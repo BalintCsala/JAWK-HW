@@ -6,8 +6,8 @@ export interface PaginatedPosts {
     posts: PostData[];
 }
 
-export function getPosts(page: number) {
-    return fetch(`${import.meta.env.VITE_API_URL}/posts/${page}`)
+export function getPosts(page: number, token?: string) {
+    return fetch(`${import.meta.env.VITE_API_URL}/posts/${page}?token=${token ?? ""}`)
         .then(response => response.json())
         .then(data => {
             return {
@@ -18,10 +18,10 @@ export function getPosts(page: number) {
         });
 }
 
-export function createPost(token: string, type: PostType, content: string, privatePost: boolean) {
+export function createPost(token: string, type: PostType, content: string, restricted: boolean) {
     return fetch(`${import.meta.env.VITE_API_URL}/post/new`, {
         method: "POST",
-        body: JSON.stringify({token, type, content, private: privatePost}),
+        body: JSON.stringify({token, type, content, restricted}),
         headers: {"Content-Type": "application/json"},
     }).then(response => response.json() as Promise<PostData>);
 }

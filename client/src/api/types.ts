@@ -16,4 +16,5 @@ export interface PostData {
     type: PostType;
     content: string;
     author: UserData;
+    restricted: boolean;
 }

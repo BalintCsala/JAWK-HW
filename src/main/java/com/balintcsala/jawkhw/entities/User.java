@@ -1,5 +1,7 @@
 package com.balintcsala.jawkhw.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -24,10 +26,7 @@ public class User implements Serializable {
     private String passwordHash;
 
     @ManyToMany
-    @JoinTable(name = "follows", joinColumns = @JoinColumn(name = "follower"), inverseJoinColumns = @JoinColumn(name = "followed"))
-    private Set<User> followedUsers;
-
-    @ManyToMany(mappedBy = "followedUsers")
+    @JoinTable(name = "follows", joinColumns = @JoinColumn(name = "followed"), inverseJoinColumns = @JoinColumn(name = "follower"))
     private Set<User> followers;
 
     public User() {
@@ -81,15 +80,11 @@ public class User implements Serializable {
         return Objects.hash(username, name, admin, passwordHash);
     }
 
-    public Set<User> getFollowedUsers() {
-        return followedUsers;
-    }
-
     public Set<User> getFollowers() {
         return followers;
     }
 
     public void followUser(User user) {
-        followedUsers.add(user);
+        user.followers.add(this);
     }
 }

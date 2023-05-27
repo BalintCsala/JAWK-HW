@@ -10,7 +10,6 @@
     </table>
     <table path="userdata.tokens">
       <table path="userdata.users" name="user_fk" from="user" to="name"/>
-      <table path="userdata.users" name="user_fk" from="user" to=""/>
     </table>
   </object-set>
 </data>

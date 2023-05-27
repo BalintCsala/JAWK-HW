@@ -5,6 +5,7 @@ import com.balintcsala.jawkhw.entities.Token;
 import com.balintcsala.jawkhw.repositories.PostRepository;
 import com.balintcsala.jawkhw.repositories.TokenRepository;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +16,7 @@ public class PostController {
         private String title;
         private String type;
         private String content;
-        private boolean privatePost;
+        private boolean restricted;
         private String token;
 
         public String getTitle() {
@@ -34,8 +35,8 @@ public class PostController {
             return token;
         }
 
-        public boolean isPrivate() {
-            return privatePost;
+        public boolean isRestricted() {
+            return restricted;
         }
     }
 
@@ -48,8 +49,14 @@ public class PostController {
     }
 
     @GetMapping("/posts/{page}")
-    Iterable<Post> getPosts(@PathVariable int page) {
-        return postRepository.findAll(PageRequest.of(page, 10, Sort.Direction.DESC, "id"));
+    Iterable<Post> getPosts(@PathVariable int page, @RequestParam(required = false) String token) {
+        Token tokenObj = tokenRepository.findByToken(token);
+        Pageable pagination = PageRequest.of(page, 10, Sort.by("id").descending());
+        if (tokenObj != null) {
+            return postRepository.findVisiblePostsForUser(tokenObj.getUser(), pagination);
+        } else {
+            return postRepository.findVisiblePosts(pagination);
+        }
     }
 
     @PostMapping("/post/new")
@@ -60,7 +67,7 @@ public class PostController {
                 token.getUser(),
                 newPost.getType(),
                 newPost.getContent(),
-                newPost.isPrivate()
+                newPost.isRestricted()
         ));
     }
 

@@ -21,8 +21,8 @@ public class Post implements Serializable {
     private String content;
 
     @Basic
-    @Column(name = "private")
-    private byte privatePost;
+    @Column(name = "restricted")
+    private byte restricted;
 
     public Object getType() {
         return type;
@@ -32,8 +32,8 @@ public class Post implements Serializable {
         return content;
     }
 
-    public boolean isPrivate() {
-        return privatePost == 1;
+    public boolean isRestricted() {
+        return restricted == 1;
     }
 
     public User getAuthor() {
@@ -42,10 +42,10 @@ public class Post implements Serializable {
 
     public Post() {}
 
-    public Post(User author, Object type, String content, boolean privatePost) {
+    public Post(User author, Object type, String content, boolean restricted) {
         this.author = author;
         this.type = type;
         this.content = content;
-        this.privatePost = (byte) (privatePost ? 1 : 0);
+        this.restricted = (byte) (restricted ? 1 : 0);
     }
 }
